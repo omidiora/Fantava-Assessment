@@ -6,22 +6,24 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {FONTFAMILY, WP} from '../util/Textutils';
+import {COLOR, FONTFAMILY, WP} from '../util/Textutils';
 import Feather from 'react-native-vector-icons/Feather';
 
 interface FormInputProps {
   label: string;
   placeholder: string;
   onChangeText: () => void;
-  password: boolean;
+  password?: boolean;
+  error:string;
 }
 const FormInput = ({
   label,
   placeholder,
   onChangeText,
   password = false,
+  error
 }: FormInputProps) => {
-  const [eyeIcon, seteyeIcon] = React.useState<boolean>(true);
+  const [eyeIcon, seteyeIcon] = React.useState<boolean>(false);
   return (
     <View style={styles.margin}>
       <Text style={styles.label}>{label}</Text>
@@ -31,8 +33,9 @@ const FormInput = ({
             placeholder={placeholder}
             style={styles.FormInput}
             onChangeText={onChangeText}
-            secureTextEntry={eyeIcon}
+            secureTextEntry={password && !eyeIcon}
           />
+          <Text style={styles.error}>{error}</Text>
         </View>
         <View>
           {password && (
@@ -56,17 +59,22 @@ const styles = StyleSheet.create({
   FormInput: {
     borderWidth: 0.8,
     borderRadius: 10,
-    borderColor: '#D1D1D1',
-    backgroundColor: '#D1D1D1',
+    borderColor: COLOR.grey,
+    backgroundColor: COLOR.grey,
     opacity: 0.3,
     color: 'black',
-    width: WP(87),
+    width: WP(90),
     paddingLeft:20
   },
   label: {
     color: '#BEBEBE',
     fontFamily: FONTFAMILY.regular,
+    padding:4
   },
   margin: {marginVertical: 10},
   eye: {marginLeft: -40, marginTop: 14},
+  error:{
+    color:"red",
+    fontFamily:FONTFAMILY.regular,
+  }
 });

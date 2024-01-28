@@ -26,23 +26,26 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import OnboardingScreen from './src/screen/Onboarding/OnboardingScreen';
 import LoginScreen from './src/screen/Login/LoginScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import RegisterScreen from './src/screen/Register/RegisterScreen';
+import OtpScreen from './src/screen/Otp/OtpScreen';
+import PasswordScreen from './src/screen/Password/PasswordScreen';
+import SignUp from './src/screen/Dashboard/Signup';
+import AlmostDone from './src/screen/Dashboard/AlmostDone';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthNavigation from './src/navigation/AuthNavigation';
+import { Provider } from 'react-redux'
+import { store } from './src/redux/store';
 
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
   return (
-    <View style={{flex:1}}>
-      <LoginScreen/>
-    </View>
+   <Provider store={store}>
+     <NavigationContainer>
+      <AuthNavigation/>
+    </NavigationContainer>
+   </Provider>
   );
 }
 
