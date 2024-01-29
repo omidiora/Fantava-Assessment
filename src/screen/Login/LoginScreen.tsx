@@ -5,6 +5,7 @@ import {
   StatusBar,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,48 +14,84 @@ import {COLOR, FONTFAMILY, HP, WP} from '../../util/Textutils';
 import HeaderComponent from '../../component/HeaderComponent';
 import ViewContainer from '../../component/ViewContainer';
 import FormInput from '../../component/FormInput';
+import {useFormik} from 'formik';
+import {LoginValidationSchema} from '../Register/validation';
+import {useLoginApiMutation} from '../../redux/AuthApi';
 
 const LoginScreen = () => {
-  return (
-   <KeyboardAvoidingView style={styles.container}>
-     <ViewContainer>
-      <HeaderComponent />
-      <View style={styles.content}>
-        <Text style={styles.login}>Log in</Text>
-        <Text style={styles.email}>
-          Enter email address and password to log in
-        </Text>
-        <View style={styles.form}>
-          <FormInput
-            label="Email Address"
-            placeholder="Email Address"
-            onChangeText={() => {}}
-          />
-          <FormInput
-            label="Password"
-            placeholder="Type here"
-            password={true}
-            onChangeText={() => {}}
-          />
-        </View>
-        <View style={styles.online}>
-          <Text style={styles.access}>Online Card Access</Text>
-        </View>
+  const {
+    values,
+    errors,
+    setFieldValue,
+    handleSubmit,
+    setFieldError,
+    handleChange,
+  } = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: LoginValidationSchema,
+    onSubmit: () => LoginUser(),
+  });
 
-        <TouchableOpacity style={styles.proceedContainer}>
-          <Text style={styles.proceed}>Proceed</Text>
-        </TouchableOpacity>
-      </View>
-    </ViewContainer>
-   </KeyboardAvoidingView>
+  const [loginApi, {isLoading, isError}] = useLoginApiMutation();
+
+  const LoginUser = () => {
+    loginApi({
+      email: values?.email,
+      password: values?.password,
+    })
+      .unwrap()
+      .then(response => {
+        console.log(response, 'response');
+      })
+      .catch(err => {
+       Alert.alert("Login",err?.data?.message|| 'Something Wrong!!!')
+      });
+  };
+
+
+  return (
+    <KeyboardAvoidingView style={styles.container}>
+      <ViewContainer>
+        <HeaderComponent />
+        <View style={styles.content}>
+          <Text style={styles.login}>Log in</Text>
+          <Text style={styles.email}>
+            Enter email address and password to log in
+          </Text>
+          <View style={styles.form}>
+            <FormInput
+              label="Email Address"
+              placeholder="Email Address"
+              onChangeText={handleChange('email')}
+            />
+            <FormInput
+              label="Password"
+              placeholder="Type here"
+              password={true}
+              onChangeText={handleChange("password")}
+            />
+          </View>
+          <View style={styles.online}>
+            <Text style={styles.access}>Online Card Access</Text>
+          </View>
+
+          <TouchableOpacity style={styles.proceedContainer} onPress={handleSubmit}>
+            <Text style={styles.proceed}>Proceed</Text>
+          </TouchableOpacity>
+        </View>
+      </ViewContainer>
+    </KeyboardAvoidingView>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
+  container: {
+    flex: 1,
   },
   row: {
     flexDirection: 'row',
@@ -87,15 +124,15 @@ const styles = StyleSheet.create({
   },
   proceedContainer: {
     backgroundColor: COLOR.green,
-    padding:HP(1.8),
-    width:WP(80),
-    alignSelf:'center',
-    marginTop:HP(3),
-    borderRadius:10
+    padding: HP(1.8),
+    width: WP(80),
+    alignSelf: 'center',
+    marginTop: HP(3),
+    borderRadius: 10,
   },
   proceed: {
     textAlign: 'center',
-    color:COLOR.dark,
-    fontFamily:FONTFAMILY.medium
+    color: COLOR.dark,
+    fontFamily: FONTFAMILY.medium,
   },
 });

@@ -17,17 +17,25 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useFormik} from 'formik';
 import {SignUpValidationSchema} from '../Register/validation';
+import DatePicker from 'react-native-date-picker';
+import {useDispatch, useSelector} from 'react-redux';
+import {setDetails} from '../../redux/AuthSlice';
+import {RootState} from '../../redux/store';
+import {useNavigation} from '@react-navigation/native';
 
 const SignUp = () => {
-  const [data, setData] = useState<any[]>([ { label: 'Female', value: 'Female' },
-  { label: 'Male', value: 'Male' },
- ]);
-  const [nextPage, setNextPage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<any[]>([
+    {label: '', value: ''},
+    {label: 'Female', value: 'Female'},
+    {label: 'Male', value: 'Male'},
+  ]);
   const [value, setValue] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
   const ref = useRef(null);
-
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {
     values,
     errors,
@@ -37,12 +45,36 @@ const SignUp = () => {
     handleChange,
   } = useFormik({
     initialValues: {
-      email: '',
+      fullName: '',
+      gender: '',
+      dob: '',
+      address: '',
+      state: '',
+      bvn:""
     },
     validationSchema: SignUpValidationSchema,
-    onSubmit: () => {},
+    onSubmit: () => SignUpDetails(),
   });
 
+  const originalDate = new Date(date);
+
+  const SignUpDetails = () => {
+    dispatch(
+      setDetails({
+        fullName: values.fullName,
+        gender: values?.gender,
+        dob: originalDate.toISOString().slice(0, 10),
+        address: values.address,
+        state: values.state,
+        bvn:values.bvn
+      }),
+    );
+    navigation.navigate('AlmostDone');
+  };
+
+  // Format the date to "YYYY-MM-DD"
+  const formattedDate = originalDate.toISOString().slice(0, 10);
+  console.log(values, 'flamdlamldm');
   return (
     <KeyboardAwareScrollView
       style={styles.container}
@@ -59,7 +91,8 @@ const SignUp = () => {
             <FormInput
               label="Your Full Name"
               placeholder="Enter your Full Name"
-              onChangeText={() => {}}
+              onChangeText={handleChange('fullName')}
+              error={errors.fullName}
             />
             <View style={styles.dropdownContainer}>
               <Text style={styles.label}>Gender</Text>
@@ -70,16 +103,15 @@ const SignUp = () => {
                 backgroundColor={'white'}
                 data={data}
                 value={value}
-                inverted={false}
                 labelField="label"
-                // valueField="url"
+                 valueField="value"
                 placeholder="Gender"
-                search={false}
                 maxHeight={250}
-                searchPlaceholder="Search..."
                 onChange={item => {
                   setValue(item);
+                  // handleChange(item.value);
                   setIsSearch(false);
+                  setFieldValue('gender', item.value);
                 }}
                 onChangeText={keyword => {
                   setIsSearch(keyword.length > 0);
@@ -97,21 +129,52 @@ const SignUp = () => {
                 //   <AntDesign style={styles.icon} name="dribbble" size={20} />
                 // )}
               />
+              <Text style={styles.gender}>{errors.gender}</Text>
             </View>
-            <FormInput
-              label="Your Full Name"
-              placeholder="Enter your Full Name"
-              onChangeText={() => {}}
+            <TouchableOpacity onPress={() => setOpen(true)}>
+              <View>
+                <FormInput
+                  label="Date of birth"
+                  placeholder="dd/mm/yyyy"
+                  onFocus={() => setOpen(true)}
+                  onChangeText={() => setOpen(true)}
+                  value={formattedDate}
+                />
+                <Text style={styles.dob}>{errors.dob}</Text>
+              </View>
+            </TouchableOpacity>
+            <DatePicker
+              modal
+              open={open}
+              mode="date"
+              date={date}
+              onConfirm={date => {
+                setOpen(false);
+                setDate(date);
+                setFieldValue('dob', date);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
             />
             <FormInput
-              label="Your Full Name"
-              placeholder="Enter your Full Name"
-              onChangeText={() => {}}
+              label="Home Address"
+              placeholder="Type here"
+              onChangeText={handleChange('address')}
+              error={errors.address}
             />
             <FormInput
               label="State"
               placeholder="Type here"
-              onChangeText={() => {}}
+              error={errors.state}
+              onChangeText={handleChange('state')}
+            />
+
+            <FormInput
+              label="Bvn"
+              placeholder="Type here"
+              error={errors.state}
+              onChangeText={handleChange('bvn')}
             />
 
             <View style={styles.checkBoxContainer}>
@@ -124,7 +187,9 @@ const SignUp = () => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.proceedContainer}>
+          <TouchableOpacity
+            style={styles.proceedContainer}
+            onPress={() => handleSubmit()}>
             <Text style={styles.proceed}>Proceed</Text>
           </TouchableOpacity>
         </View>
@@ -200,7 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginLeft: -5,
     width: WP(90),
-    opacity: 0.4,
+    opacity: 0.7,
   },
   icon: {
     marginRight: 5,
@@ -222,5 +287,14 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     paddingBottom: 10,
     paddingTop: 10,
+  },
+  gender: {
+    color: 'red',
+    fontFamily: FONTFAMILY.regular,
+  },
+  dob: {
+    color: 'red',
+    fontFamily: FONTFAMILY.regular,
+    marginTop: HP(-3),
   },
 });

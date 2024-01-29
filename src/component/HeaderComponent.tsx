@@ -1,10 +1,12 @@
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
+import {StyleSheet, Text, View, StatusBar, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/images/svgs/logo.svg';
 import {COLOR} from '../util/Textutils';
+import { useNavigation } from '@react-navigation/native';
 
 const HeaderComponent = () => {
+  const navigation=useNavigation()
   return (
     <View>
       <StatusBar
@@ -15,7 +17,9 @@ const HeaderComponent = () => {
         // hidden={hidden}
       />
       <View style={styles.row}>
-        <Ionicons name="arrow-back" size={32} color={COLOR.dark} />
+       <TouchableOpacity onPress={()=>navigation.goBack()}>
+       <Ionicons name="arrow-back" size={32} color={COLOR.dark} />
+       </TouchableOpacity>
         <Logo />
       </View>
     </View>

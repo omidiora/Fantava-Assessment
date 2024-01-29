@@ -7,11 +7,12 @@ export interface AuthSliceState {
 
 const initialState: AuthSliceState = {
   value: "",
-  password:""
+  password:"",
+  details:{}
 }
 
 export const AuthSlice = createSlice({
-  name: 'email',
+  name: 'auth',
   initialState,
   reducers: {
     setEmail: (state, action: PayloadAction<number>) => {
@@ -20,10 +21,14 @@ export const AuthSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password= action.payload
     },
+    setDetails: (state, action: PayloadAction<string>) => {
+      state.details= action.payload
+      
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setEmail ,setPassword } = AuthSlice.actions
+export const { setEmail ,setPassword ,setDetails} = AuthSlice.actions
 
 export default AuthSlice.reducer

@@ -1,10 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
-import EmailSlice from './AuthSlice';
+import authSlice from './AuthSlice';
 import { authApi } from './AuthApi';
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
-    email: EmailSlice,
+    auth: authSlice,
   },
   middleware: (getDefaultMiddleware) =>
   getDefaultMiddleware({

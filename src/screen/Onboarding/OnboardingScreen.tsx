@@ -7,33 +7,35 @@ import Slider2 from '../../assets/images/svgs/onboarding2.svg';
 import Slider3 from '../../assets/images/svgs/onboarding3.svg';
 import Header from '../../assets/images/svgs/header.svg';
 import {COLOR, FONTFAMILY} from '../../util/Textutils';
+import {useNavigation} from '@react-navigation/native';
 
 const slides = [
   {
     key: 'one',
     title: 'Gift Cards',
     text: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    image: <Slider1  height={330}/>,
+    image: <Slider1 height={330} />,
     backgroundColor: '#59b2ab',
   },
   {
     key: 'two',
     title: 'Fast & Secure',
     text: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    image: <Slider2  height={330}/>,
+    image: <Slider2 height={330} />,
     backgroundColor: '#febe29',
   },
   {
     key: 'three',
     title: 'Easy to use',
     text: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    image: <Slider3  height={330}/>,
+    image: <Slider3 height={330} />,
     backgroundColor: '#22bcb5',
   },
 ];
 
-const App = () => {
+const OnboardingScreen = () => {
   const [showRealApp, setShowRealApp] = useState(false);
+  const navigation = useNavigation();
 
   const renderItem = ({item}) => {
     return (
@@ -49,8 +51,10 @@ const App = () => {
 
   const renderNextButton = () => {
     return (
-      <TouchableOpacity style={styles.buttonCircle}>
-        <Text style={styles.skip}>{"Skip  >>"}</Text>
+      <TouchableOpacity
+        style={styles.buttonCircle}
+        onPress={() => navigation.navigate('Register')}>
+        <Text style={styles.skip}>{'Skip  >>'}</Text>
       </TouchableOpacity>
     );
   };
@@ -123,9 +127,9 @@ const styles = StyleSheet.create({
   },
   skip: {
     color: COLOR.green,
-    fontSize:17,
-    fontFamily:FONTFAMILY.regular
+    fontSize: 17,
+    fontFamily: FONTFAMILY.regular,
   },
 });
 
-export default App;
+export default OnboardingScreen;

@@ -12,6 +12,13 @@ export const EmailValidationSchema = () => {
     });
 }
 
+export const LoginValidationSchema = () => {
+    return object({
+        email: string().label('Email address').email().required('Email Address field is required'),
+        password: string().label('Password').required('Passwored field is required'),
+    });
+}
+
 
 export const PasswordValidationSchema = () => {
     return object({
@@ -21,10 +28,11 @@ export const PasswordValidationSchema = () => {
 
 export const SignUpValidationSchema = () => {
     return object({
-        fullname: string().required('Full Name field is required'),
+        fullName: string().required('Full Name field is required'),
         gender: string().required('Gender field is required'),
         dob: string().required('Date of birth field is required'),
-        address: string().required('address field is required'),
-        state: string().required('state field is required'),
+        address: string().required('Address field is required'),
+        state: string().required('State field is required'),
+        bvn: string().required('Bvn field is required'),
     });
 }

@@ -15,13 +15,17 @@ interface FormInputProps {
   onChangeText: () => void;
   password?: boolean;
   error:string;
+  onFocus:()=>void;
+  value:string
 }
 const FormInput = ({
   label,
   placeholder,
   onChangeText,
   password = false,
-  error
+  error,
+  onFocus,
+  value
 }: FormInputProps) => {
   const [eyeIcon, seteyeIcon] = React.useState<boolean>(false);
   return (
@@ -34,6 +38,10 @@ const FormInput = ({
             style={styles.FormInput}
             onChangeText={onChangeText}
             secureTextEntry={password && !eyeIcon}
+            onFocus={onFocus}
+            value={value}
+            
+          
           />
           <Text style={styles.error}>{error}</Text>
         </View>
@@ -61,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: COLOR.grey,
     backgroundColor: COLOR.grey,
-    opacity: 0.3,
+    opacity: 0.5,
     color: 'black',
     width: WP(90),
     paddingLeft:20

@@ -25,7 +25,6 @@ import {useVerifyMutation} from '../../redux/AuthApi';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
-  const count = useSelector((state: RootState) => state?.email);
   const [verify, {isLoading, error}] = useVerifyMutation();
   const dispatch = useDispatch();
 
@@ -59,6 +58,7 @@ const RegisterScreen = () => {
     })
       .unwrap()
       .then(response => {
+        console.log(response,'rlamldmalmdlfamldmflamlfma')
         setEmailValue();
       })
       .catch(error => {

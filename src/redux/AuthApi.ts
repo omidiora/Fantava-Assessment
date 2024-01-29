@@ -6,7 +6,7 @@ import {axiosBaseQuery} from './axiosBaseQuery';
 // Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: axiosBaseQuery({baseUrl: "https://cardex.live"}),
+  baseQuery: axiosBaseQuery({baseUrl: 'https://cardex.live'}),
   endpoints: builder => ({
     verify: builder.mutation<any, any>({
       query: credentials => ({
@@ -16,9 +16,28 @@ export const authApi = createApi({
     }),
 
     verifyOtp: builder.mutation<any, any>({
-      query: credentials => (console.log(credentials,'error from message'),{
-        url: `/api/email/verify/code?code=${credentials}`,
-        method: 'get',
+      query: credentials => (
+        console.log(credentials, 'error from message'),
+        {
+          url: `/api/email/verify/code?code=${credentials}`,
+          method: 'get',
+        }
+      ),
+    }),
+
+    registerApi: builder.mutation<any, any>({
+      query: credentials => ({
+        url: `/api/auth/register`,
+        body: credentials,
+        method: 'post',
+      }),
+    }),
+
+    loginApi: builder.mutation<any, any>({
+      query: credentials => ({
+        url: `/api/auth/login`,
+        body: credentials,
+        method: 'post',
       }),
     }),
   }),
@@ -26,4 +45,5 @@ export const authApi = createApi({
 
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
-export const {useVerifyMutation ,useVerifyOtpMutation} = authApi;
+export const {useVerifyMutation, useVerifyOtpMutation, useRegisterApiMutation, useLoginApiMutation} =
+  authApi;
