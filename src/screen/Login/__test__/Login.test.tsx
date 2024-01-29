@@ -1,52 +1,64 @@
-// __tests__/YourComponent.test.tsx
-
+// __tests__/Login.test.js
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
-import { NavigationContainer, NavigationContainerProps } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import YourComponent from '../YourComponent';
-import RegisterScreen from '../../Register/RegisterScreen';
-import OtpScreen from '../../Otp/OtpScreen';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import axios from 'axios'; // Import axios to mock
+import LoginScreen from '../LoginScreen';
 
-// Define your RootParamList
-type RootParamList = {
-  Register: undefined;
-  Otp: undefined;
-};
 
-const Stack = createNativeStackNavigator<RootParamList>();
+jest.mock('axios'); // Mock Axios module
 
-const renderWithNavigation = (component: React.ReactNode) => {
-  return render(
-    <NavigationContainer>
-      <Stack.Navigator>
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Otp" component={OtpScreen} /> 
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+describe('Login Component', () => {
+  it('should handle login with valid credentials', async () => {
+    // Mock Axios post request to return a successful response
+    axios.post.mockResolvedValueOnce({
+      data: { token: 'fakeToken' },
+    });
 
-const mockNavigate = jest.fn();
+    const onLoginMock = jest.fn();
 
-// Mock the navigation prop
-jest.mock('@react-navigation/native', () => ({
-  ...jest.requireActual('@react-navigation/native'),
-  useNavigation: (): NavigationContainerProps<RootParamList> => ({
-    navigate: mockNavigate,
-  }),
-}));
+    const { getByPlaceholderText, getByText } = render(
+      <LoginScreen  onLogin={onLoginMock} />
+    );
 
-describe('YourComponent', () => {
-  it('navigates when TouchableOpacity is clicked', () => {
-    const { getByText } = renderWithNavigation(<RegisterScreen />);
+    const usernameInput = getByPlaceholderText('Username');
+    const passwordInput = getByPlaceholderText('Password');
+    const loginButton = getByText('Login');
 
-    const proceedButton = getByText('Proceed');
+    // Set input values
+    fireEvent.changeText(usernameInput, 'testuser');
+    fireEvent.changeText(passwordInput, 'testpassword');
 
-    // Simulate TouchableOpacity press
-    fireEvent.press(proceedButton);
+    // Trigger the login button press
+    fireEvent.press(loginButton);
 
-    // Check if navigation was called with the correct screen name
-    expect(mockNavigate).toHaveBeenCalledWith('OtpScreen');
+    // Wait for the async function to complete
+    await waitFor(() => expect(onLoginMock).toHaveBeenCalledWith('fakeToken'));
+  });
+
+  it('should handle login with invalid credentials', async () => {
+    // Mock Axios post request to return an error
+    axios.post.mockRejectedValueOnce(new Error('Invalid credentials'));
+
+    const onLoginMock = jest.fn();
+
+    const { getByPlaceholderText, getByText } = render(
+      <Login onLogin={onLoginMock} />
+    );
+
+    const email = getByPlaceholderText('email');
+    const passwordInput = getByPlaceholderText('Type here ');
+    const loginButton = getByText('Login');
+
+    // Set input values
+    fireEvent.changeText(email, 'invaliduser');
+    fireEvent.changeText(passwordInput, 'invalidpassword');
+
+    // Trigger the login button press
+    fireEvent.press(loginButton);
+
+    // Wait for the async function to complete
+    await waitFor(() =>
+      expect(getByText('Invalid credentials')).toBeTruthy()
+    );
   });
 });

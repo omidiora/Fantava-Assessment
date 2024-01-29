@@ -17,8 +17,10 @@ import FormInput from '../../component/FormInput';
 import {useFormik} from 'formik';
 import {LoginValidationSchema} from '../Register/validation';
 import {useLoginApiMutation} from '../../redux/AuthApi';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
+  const navigation=useNavigation()
   const {
     values,
     errors,
@@ -44,7 +46,7 @@ const LoginScreen = () => {
     })
       .unwrap()
       .then(response => {
-        console.log(response, 'response');
+       navigation.navigate("Dashboard");
       })
       .catch(err => {
        Alert.alert("Login",err?.data?.message|| 'Something Wrong!!!')
