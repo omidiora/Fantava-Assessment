@@ -5,6 +5,8 @@ import {
   StatusBar,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useRef} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,6 +19,9 @@ import PhoneInput from 'react-native-phone-number-input';
 import {RootState} from '../../redux/store';
 import {useSelector} from 'react-redux';
 import {useRegisterApiMutation} from '../../redux/AuthApi';
+import { useNavigation } from '@react-navigation/native';
+import { PhoneValidationSchema } from '../Register/validation';
+import { useFormik } from 'formik';
 
 const AlmostDone = () => {
   const [value, setValue] = useState('');
@@ -30,6 +35,8 @@ const AlmostDone = () => {
   );
   const [registerApi, {isLoading, error}] = useRegisterApiMutation();
 
+  const navigation=useNavigation()
+
   console.log(registerDetails, 'adad');
 
   const Registration = () => {
@@ -40,21 +47,41 @@ const AlmostDone = () => {
       email: registerDetails?.value,
       state: registerDetails?.details?.state,
       password: registerDetails?.password,
-      phoneNumber: value,
+      phoneNumber: values?.phone,
       bvn:  registerDetails?.details?.bvn,
       address:registerDetails?.details?.address,
     })
       .unwrap()
       .then(response => {
-      
+        Alert.alert('Registration', 'Registration is successfully', [
+          {text: 'OK', onPress: () => navigation.navigate("Dashboard")},
+        ]);
+    
       })
       .catch(err => {
-        console.log(err);
+       Alert.alert("Registration", "Something Went wrong with your details. kindly check and retry")
       });
   };
 
+  const {
+    values,
+    errors,
+    setFieldValue,
+    handleSubmit,
+    setFieldError,
+    handleChange,
+  } = useFormik({
+    initialValues: {
+      phone: '',
+    },
+    validationSchema: PhoneValidationSchema,
+    onSubmit: () =>  Registration(),
+  });
 
-  console.log(value,'s')
+
+
+  console.log(values,'value')
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <ViewContainer>
@@ -76,9 +103,7 @@ const AlmostDone = () => {
               defaultValue={value}
               defaultCode="NG"
               layout="second"
-              onChangeText={text => {
-                setValue(text);
-              }}
+              onChangeText={handleChange("phone")}
               onChangeFormattedText={text => {
                 setFormattedValue(text);
               }}
@@ -86,12 +111,14 @@ const AlmostDone = () => {
               // withShadow
               autoFocus
             />
+            <Text style={styles.phone}>{errors.phone}</Text>
           </View>
 
           <TouchableOpacity
+          disabled={isLoading}
             style={styles.proceedContainer}
-            onPress={() => Registration()}>
-            <Text style={styles.proceed}>Proceed</Text>
+            onPress={handleSubmit}>
+          {isLoading?   <ActivityIndicator color="white"/> : <Text style={styles.proceed}>Proceed</Text>}
           </TouchableOpacity>
         </View>
       </ViewContainer>
@@ -123,6 +150,8 @@ const styles = StyleSheet.create({
     fontFamily: FONTFAMILY.medium,
     paddingTop: HP(1.2),
     width: '80%',
+    color: COLOR.black,
+    opacity:0.6
   },
 
   form: {
@@ -158,4 +187,8 @@ const styles = StyleSheet.create({
     color: COLOR.primaryDark,
     fontSize: WP(3),
   },
+  phone:{
+    color:"red",
+    fontFamily:FONTFAMILY.regular
+  }
 });

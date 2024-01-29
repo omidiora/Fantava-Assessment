@@ -111,6 +111,8 @@ const styles = StyleSheet.create({
     fontFamily: FONTFAMILY.medium,
     paddingTop: HP(1.2),
     width: '80%',
+    color: COLOR.black,
+    opacity:0.6
   },
 
   form: {

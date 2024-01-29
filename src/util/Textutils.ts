@@ -6,7 +6,8 @@ export const COLOR = {
   green:"#47EAA6",
   primaryDark:'#000000',
   white:'#FFFFFF',
-  grey:'#D1D1D1'
+  grey:'#D1D1D1',
+  black:'#000'
 
 };
 

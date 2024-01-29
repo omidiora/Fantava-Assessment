@@ -1,9 +1,7 @@
 import { object, string } from 'yup';
 // import { LocateMe } from '../utility/getLocation';
 
-const phoneRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*\-_+=<>"'.,?])[A-Za-z\d#$@!%&*\-_+=<>"'.,?]{8,30}$/
-const nameTest = /^[A-Za-z]+$/
-
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 
 export const EmailValidationSchema = () => {
@@ -33,6 +31,12 @@ export const SignUpValidationSchema = () => {
         dob: string().required('Date of birth field is required'),
         address: string().required('Address field is required'),
         state: string().required('State field is required'),
-        bvn: string().required('Bvn field is required'),
+        bvn: string().required('Bvn field is required').length(11),
+    });
+}
+
+export const PhoneValidationSchema = () => {
+    return object({
+        phone:string().matches(phoneRegExp, 'Phone number is not valid').required().max(11),
     });
 }

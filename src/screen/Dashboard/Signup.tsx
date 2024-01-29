@@ -173,7 +173,7 @@ const SignUp = () => {
             <FormInput
               label="Bvn"
               placeholder="Type here"
-              error={errors.state}
+              error={errors.bvn}
               onChangeText={handleChange('bvn')}
             />
 

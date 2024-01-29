@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -98,7 +99,7 @@ const RegisterScreen = () => {
           <TouchableOpacity
             style={styles.proceedContainer}
             onPress={() => VerifyEmail()}>
-            <Text style={styles.proceed}>Proceed</Text>
+          {isLoading ? <ActivityIndicator color={'white'}/> : <Text style={styles.proceed}>Proceed</Text>}
           </TouchableOpacity>
         </View>
       </ViewContainer>
@@ -130,6 +131,8 @@ const styles = StyleSheet.create({
     fontFamily: FONTFAMILY.medium,
     paddingTop: HP(1.2),
     width: '80%',
+    color: COLOR.black,
+    opacity:0.6
   },
 
   form: {

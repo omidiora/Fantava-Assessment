@@ -18,18 +18,14 @@ const AuthNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}>
-        
-        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Otp" component={OtpScreen} /> 
-      <Stack.Screen name="CreatePassword" component={PasswordScreen} /> 
+      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Otp" component={OtpScreen} />
+      <Stack.Screen name="CreatePassword" component={PasswordScreen} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="AlmostDone" component={AlmostDone} />
-      <Stack.Screen name="Login" component={LoginScreen} /> 
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Dashboard" component={DashoboardScreen} />
-
-
-
     </Stack.Navigator>
   );
 };

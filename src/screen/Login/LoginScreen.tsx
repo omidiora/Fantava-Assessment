@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -68,12 +69,14 @@ const LoginScreen = () => {
               label="Email Address"
               placeholder="Email Address"
               onChangeText={handleChange('email')}
+              error={errors.email}
             />
             <FormInput
               label="Password"
               placeholder="Type here"
               password={true}
               onChangeText={handleChange("password")}
+              error={errors.password}
             />
           </View>
           <View style={styles.online}>
@@ -81,7 +84,7 @@ const LoginScreen = () => {
           </View>
 
           <TouchableOpacity style={styles.proceedContainer} onPress={handleSubmit}>
-            <Text style={styles.proceed}>Proceed</Text>
+         {isLoading ? <ActivityIndicator/> : <Text style={styles.proceed}>Proceed</Text>}
           </TouchableOpacity>
         </View>
       </ViewContainer>
@@ -112,6 +115,8 @@ const styles = StyleSheet.create({
     fontSize: WP(4),
     fontFamily: FONTFAMILY.medium,
     paddingTop: HP(1.2),
+    color: COLOR.black,
+    opacity:0.6
   },
   form: {
     paddingTop: HP(3),

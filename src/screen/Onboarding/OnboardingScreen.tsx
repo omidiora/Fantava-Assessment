@@ -114,11 +114,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    // color: 'white',
+  
     textAlign: 'center',
     fontFamily: FONTFAMILY.light,
     width: '90%',
     alignSelf: 'center',
+    color: COLOR.black,
+    opacity:0.6
   },
   active: {backgroundColor: COLOR.dark, marginTop: -150},
   dotStyle: {

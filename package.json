@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "jest": {
-   "preset": "react-native",
+    "preset": "react-native",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|react-native-svg|react-redux|@reduxjs/toolkit/query/react|axios|redux|@react-navigation/native-stack|@react-navigation/native|'/node_modules/(?!@react-navigation/elements/lib/commonjs/assets/back-icon.png))"
     ]
@@ -34,6 +34,7 @@
     "react-native-animated-loader": "^1.0.0",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-asset": "^2.1.1",
+    "react-native-bootsplash": "^5.3.0",
     "react-native-date-picker": "^4.3.5",
     "react-native-element-dropdown": "^2.10.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
